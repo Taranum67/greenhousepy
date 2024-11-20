@@ -67,5 +67,21 @@ class TestGreenhouse(TestCase):
         system = Greenhouse()
         self.assertTrue(system.check_too_much_light())
 
+    @patch.object(GPIO, "output")
+    @patch.object(GPIO, "input")
+    def test_manage_lightbulb_should_be_turned_on(self, mock_photoresister: Mock,mock_red_light: Mock):
+        mock_photoresister.return_value = True
+        system = Greenhouse()
+        system.manage_lightbulb()
+        mock_red_light.assert_called_once_with(system.LED_PIN, True)
+        self.assertTrue(system.red_light_on)
 
+    @patch.object(GPIO, "output")
+    @patch.object(GPIO, "input")
+    def test_manage_lightbulb_should_be_turned_off(self, mock_photoresister: Mock, mock_red_light: Mock):
+        mock_photoresister.return_value = False
+        system = Greenhouse()
+        system.manage_lightbulb()
+        mock_red_light.assert_called_once_with(system.LED_PIN, False)
+        self.assertFalse(system.red_light_on)
 
