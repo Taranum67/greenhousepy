@@ -30,6 +30,8 @@ class Greenhouse:
         moisture = self.soil_moisture_sensor.moisture_read()
         if moisture < 300:
             raise GreenhouseError("Soil moisture level too low!")
+        elif moisture > 500:
+            raise GreenhouseError("Soil moisture level too high!")
         return moisture
 
     def turn_on_sprinkler(self) -> None:
